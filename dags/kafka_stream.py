@@ -1,6 +1,8 @@
 from datetime import datetime
-from airflow import DAG
-from airflow.operators.python import PythonOperator
+# from airflow import DAG
+# from airflow.operators.python import PythonOperator
+import json
+from kafka import KafkaProducer
 
 
 default_args = {
@@ -41,13 +43,17 @@ def format_data(res):
 
 def stream_data():
     import json
+    from kafka import KafkaProducer
+
+    import time
     
     res = get_data()
     
     res = format_data(res)
-    print(json.dumps(res, indent=3))
+    # print(json.dumps(res, indent=3)) #this is pretty print for better human readability. Cosmetic pretty print.
     
-    
+    producer = KafkaProducer(bootstrap_servers=['localhost:9092'], max_block_ms = 5000)
+    producer.send('user_created', json.dumps(res).encode('utf-8'))
 
 
 # with DAG('user_automation',
