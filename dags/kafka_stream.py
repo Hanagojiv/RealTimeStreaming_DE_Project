@@ -1,13 +1,13 @@
 from datetime import datetime
-# from airflow import DAG
-# from airflow.operators.python import PythonOperator
-import json
-from kafka import KafkaProducer
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+import logging
+    
 
 
 default_args = {
     'owner': 'vicky',
-    'start_date': datetime(2024, 12, 19, 10, 00)
+    'start_date': datetime(2024, 12, 23, 10, 00)
 }
 def get_data():
     import json
@@ -46,24 +46,38 @@ def stream_data():
     from kafka import KafkaProducer
 
     import time
-    
-    res = get_data()
-    
-    res = format_data(res)
+    import logging
+    # res = get_data()
+    # res = format_data(res)
     # print(json.dumps(res, indent=3)) #this is pretty print for better human readability. Cosmetic pretty print.
     
-    producer = KafkaProducer(bootstrap_servers=['localhost:9092'], max_block_ms = 5000)
-    producer.send('user_created', json.dumps(res).encode('utf-8'))
-
-
-# with DAG('user_automation',
-#          default_args=default_args,
-#          schedule_interval='@daily',
-#          catchup=False) as dag:
+    producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms = 5000)
+    # producer.send('user_created', json.dumps(res).encode('utf-8'))
+    curr_time = time.time()
     
-#     streaming_task = PythonOperator(
-#         task_id='stream_date_from_api',
-#         python_callable=stream_date
-#     )
+    while True:
+        if time.time() > curr_time + 60: # 1 minute
+            break
+        try:
+            res = get_data()
+            res = format_data(res)
+            producer.send('user_created', json.dumps(res).encode('utf-8'))
+        except Exception as e:
+            print(e)
+            logging.error(f'An error occured: {e}')
+            continue
+    return "Stream completed successfully."
+# def debug_task():
+#     logging.info("This is a test task to verify DAG loading.")
 
-stream_data()
+with DAG('user_automation',
+         default_args=default_args,
+         schedule_interval='@daily',
+         catchup=False) as dag:
+    
+    streaming_task = PythonOperator(
+        task_id='stream_data_from_api',
+        python_callable=stream_data
+    )
+
+# stream_data()
