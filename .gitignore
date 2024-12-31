@@ -1,5 +1,20 @@
 ./
 /.env
 credentials
+
+
+# Ignore log files
+./
+logs/
+
+# Ignore system files
+.DS_Store
+
+# Ignore Terraform state files
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
+.terraform.lock.hcl
+
 data/
 

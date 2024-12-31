@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 import logging
     
-
+     
 
 default_args = {
     'owner': 'vicky',
@@ -47,9 +47,9 @@ def stream_data():
 
     import time
     import logging
-    # res = get_data()
-    # res = format_data(res)
-    # print(json.dumps(res, indent=3)) #this is pretty print for better human readability. Cosmetic pretty print.
+    res = get_data()
+    res = format_data(res)
+    print(json.dumps(res, indent=3)) #this is pretty print for better human readability. Cosmetic pretty print.
     
     producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms = 5000)
     # producer.send('user_created', json.dumps(res).encode('utf-8'))
