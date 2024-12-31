@@ -101,7 +101,7 @@ resource "null_resource" "create_redshift_schema" {
 
   depends_on = [aws_redshift_cluster.redshift_cluster]
 }
-# Create Redshift Schema
+#  Create Redshift Schema
 resource "null_resource" "update_redshift_schema" {
   provisioner "local-exec" {
   command = <<EOT
