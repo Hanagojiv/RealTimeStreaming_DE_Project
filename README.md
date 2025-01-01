@@ -27,6 +27,8 @@ With this approach, users can learn how to implement data-driven solutions that 
 
 ## 📜 Project Overview
 
+![Architecture diagram](Images/Architecture_diagram.png "Architecture _diagram")
+
 The pipeline is designed to process user creation events 👤 from a Kafka topic 📡, transform the data using Spark Structured Streaming ✨, and store the results in a Redshift database 🗄️. The data pipeline supports scalability 📈, resilience 🛡️, and real-time processing ⏱️, making it suitable for industrial applications like monitoring systems 🛠️, IoT 🌐, e-commerce analytics 🛍️, and customer behavior analysis. This approach enhances decision-making, optimizes operational efficiency, and provides a framework for building advanced real-time solutions.
 
 The project stands as an example of how modern technologies can synergize to deliver a seamless flow of information, ensuring timely responses to critical events and uncovering actionable insights 🌟. Whether it’s handling IoT device logs or analyzing customer purchasing patterns, the architecture is built to cater to demanding data-driven scenarios.
